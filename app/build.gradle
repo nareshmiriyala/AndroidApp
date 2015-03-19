@@ -24,4 +24,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.0.0'
     compile files('libs/movies-0.0.1-SNAPSHOT.jar')
     compile files('libs/google-api-services-youtube-v3-rev129-1.19.1.jar')
+    compile files('libs/google-http-client-jackson2-1.19.0.jar')
+    compile files('libs/google-api-client-android-1.19.0.jar')
+    compile files('libs/google-api-client-1.19.0.jar')
+    compile files('libs/google-http-client-gson-1.19.0.jar')
+    compile files('libs/google-api-client-json-1.2.3-alpha.jar')
+    compile files('libs/google-api-client-1.4.1-beta.jar')
 }
