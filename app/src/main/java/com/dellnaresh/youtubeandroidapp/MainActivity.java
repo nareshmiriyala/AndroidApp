@@ -4,14 +4,35 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+
+import com.youtube.indianmovies.data.Search;
+
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
+    private Button jButton;
+    private EditText jEditText;
+    private ListView jListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        jButton= (Button) findViewById(R.id.button);
+        jEditText= (EditText) findViewById(R.id.editText);
+        jListView= (ListView) findViewById(R.id.listView);
+        jButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Search search=new Search();
+                List<com.google.api.services.youtube.model.SearchResult> searchResults = search.find(String.valueOf(jEditText));
+            }
+        });
     }
 
 
