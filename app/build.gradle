@@ -26,17 +26,14 @@ apply plugin: 'android'
 repositories {
     mavenCentral()
     maven {
-        url "https://repository-achartengine.forge.cloudbees.com/snapshot/"
+        url "http://maven.apache.org"
     }
 }
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.0.0'
-    compile 'google-oauth-client-jetty:1.19.0'
-    compile 'jackson-mapper-asl:1.9.13'
-    compile 'google-collections:1.0'
+    compile 'com.google.apis:google-api-services-youtube:v3-rev130-1.19.1'
+    compile 'com.google.oauth-client:google-oauth-client-jetty:1.11.0-beta'
     compile files('libs/movies-0.0.1-SNAPSHOT.jar')
-    compile files('libs/google-api-services-youtube-v3-rev129-1.19.1.jar')
-    compile files('libs/google-api-client-1.4.1-beta.jar')
 }
