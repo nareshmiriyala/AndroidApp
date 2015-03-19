@@ -24,7 +24,17 @@
         android:layout_weight="0.14"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/editText"
-        android:layout_toEndOf="@+id/editText" />
+        android:layout_toEndOf="@+id/editText"
+        android:onClick="startTask"/>
+    <TextView
+        android:id="@+id/output"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/hello_world"
+        android:layout_above="@+id/listView"
+        android:layout_alignLeft="@+id/listView"
+        android:layout_alignStart="@+id/listView"
+        android:layout_marginBottom="26dp" />
     <ListView
         android:layout_width="300dp"
         android:layout_height="374dp"
