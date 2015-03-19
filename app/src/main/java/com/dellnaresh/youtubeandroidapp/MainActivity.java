@@ -31,16 +31,19 @@ public class MainActivity extends ActionBarActivity {
         jEditText = (EditText) findViewById(R.id.editText);
         jListView = (ListView) findViewById(R.id.listView);
         final List<String> stringList = new ArrayList<>();
+        final Search search = new Search();
         jButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Search search = new Search();
+
                 searchResults = search.find(String.valueOf(jEditText));
 
             }
         });
-        for (SearchResult searchResult : searchResults) {
-            stringList.add(searchResult.getSnippet().getTitle());
+        if(searchResults!=null) {
+            for (SearchResult searchResult : searchResults) {
+                stringList.add(searchResult.getSnippet().getTitle());
+            }
         }
         final ArrayAdapter adapter = new ArrayAdapter(this,
                 android.R.layout.simple_list_item_1, stringList);
