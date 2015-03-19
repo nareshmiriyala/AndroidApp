@@ -25,7 +25,6 @@ public class MainActivity extends ActionBarActivity {
     private Button jButton;
     private EditText jEditText;
     private ListView jListView;
-    private List<com.google.api.services.youtube.model.SearchResult> searchResults;
     List<String> stringList = new ArrayList<>();
 
     @Override
@@ -89,7 +88,9 @@ public class MainActivity extends ActionBarActivity {
                 Log.d(mTAG, (i+1)+" => "+arg[i]);
             }
             Search search=new Search();
-            searchResults = search.find(arg[0]);
+            search.setNumberOfVideosReturned(10);
+            List<com.google.api.services.youtube.model.SearchResult> searchResults = search.find(arg[0]);
+
             if(searchResults!=null) {
                 for (SearchResult searchResult : searchResults) {
                     stringList.add(searchResult.getSnippet().getTitle());
