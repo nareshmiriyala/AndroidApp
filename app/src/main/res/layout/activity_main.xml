@@ -43,44 +43,4 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
 
-    <ImageView
-        android:id="@+id/thumbImage"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        />
-
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/thumbImage"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:text=""
-        android:textStyle="bold"
-        android:typeface="sans" />
-
-    <TextView
-        android:id="@+id/reporter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginTop="5dip"
-        android:layout_toRightOf="@id/thumbImage"
-        android:paddingLeft="5dp"
-        android:text=""
-        android:textSize="12sp" />
-
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/reporter"
-        android:layout_alignBottom="@+id/reporter"
-        android:layout_alignParentRight="true"
-        android:paddingRight="5dp"
-        android:text=""
-        android:textSize="12sp" />
 </RelativeLayout>

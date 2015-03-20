@@ -40,8 +40,9 @@ public class CustomListAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
+        SearchResult searchItem = listData.get(position);
         if (convertView == null) {
-            convertView = layoutInflater.inflate(R.layout.abc_list_menu_item_layout, null);
+            convertView = layoutInflater.inflate(R.layout.search_list, null);
             holder = new ViewHolder();
             holder.headlineView = (TextView) convertView.findViewById(R.id.title);
             holder.reporterNameView = (TextView) convertView.findViewById(R.id.reporter);
@@ -52,12 +53,14 @@ public class CustomListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        SearchResult searchItem = listData.get(position);
-        if(searchItem!=null) {
+        if (searchItem != null) {
             holder.headlineView.setText(searchItem.getId().getVideoId());
-            if(searchItem.getSnippet()!=null) {
-                holder.reporterNameView.setText("Title, " + searchItem.getSnippet().getDescription());
-                holder.reportedDateView.setText(searchItem.getSnippet().getPublishedAt().toString());
+            if (searchItem.getSnippet() != null) {
+                if (searchItem.getSnippet().getDescription() != null) {
+                    holder.reporterNameView.setText("Title, " + searchItem.getSnippet().getDescription());
+                }
+                if (searchItem.getSnippet().getPublishedAt() != null)
+                    holder.reportedDateView.setText(searchItem.getSnippet().getPublishedAt().toString());
 
                 if (holder.imageView != null) {
                     new ImageDownloaderTask(holder.imageView).execute(searchItem.getSnippet().getThumbnails().getDefault().getUrl());
