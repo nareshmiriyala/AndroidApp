@@ -25,6 +25,7 @@ public class MainActivity extends ActionBarActivity {
     List<com.google.api.services.youtube.model.SearchResult> searchResults = null;
     private EditText jEditText;
     private ListView jListView;
+    private Search search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,8 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         jEditText = (EditText) findViewById(R.id.editText);
         jListView = (ListView) findViewById(R.id.listView);
-
+        search = new Search();
+        Search.setNumberOfVideosReturned(10);
     }
 
     //Method called on clicking button
@@ -75,14 +77,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected String doInBackground(String... arg) {
             Log.d(mTAG, "Just started doing stuff in asynctask");
-            Log.d(mTAG, "I got " + arg.length + " arguments and they are: ");
-            String result = null;
-            for (int i = 0; i < arg.length; i++) {
-                result = arg[i] + ",";
-                Log.d(mTAG, (i + 1) + " => " + arg[i]);
-            }
-            Search search = new Search();
-            Search.setNumberOfVideosReturned(10);
+
             searchResults = search.find(arg[0]);
             runOnUiThread(new Thread() {
                 public void run() {
@@ -91,7 +86,7 @@ public class MainActivity extends ActionBarActivity {
                 }
             });
 
-            return result;
+            return "OK";
         }
 
         @Override
