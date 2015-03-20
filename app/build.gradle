@@ -27,7 +27,12 @@ android {
         abortOnError false
     }
 }
-apply plugin: 'android'
+android {
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+}
 repositories {
     mavenCentral()
     maven {
