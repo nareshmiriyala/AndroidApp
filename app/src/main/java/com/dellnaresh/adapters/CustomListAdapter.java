@@ -55,8 +55,8 @@ public class CustomListAdapter extends BaseAdapter {
         if (searchItem != null) {
             holder.headlineView.setText(searchItem.getId().getVideoId());
             if (searchItem.getSnippet() != null) {
-                if (searchItem.getSnippet().getDescription() != null) {
-                    holder.reporterNameView.setText("Title, " + searchItem.getSnippet().getDescription());
+                if (searchItem.getSnippet().getTitle() != null) {
+                    holder.reporterNameView.setText("Title, " + searchItem.getSnippet().getTitle());
                 }
                 if (searchItem.getSnippet().getPublishedAt() != null)
                     holder.reportedDateView.setText(searchItem.getSnippet().getPublishedAt().toString());
