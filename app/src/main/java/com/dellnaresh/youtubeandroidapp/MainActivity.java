@@ -116,10 +116,10 @@ public class MainActivity extends ActionBarActivity {
                     //in this case, going to save it on the root directory of the
                     //sd card.
 //                    File SDCardRoot = Environment.getExternalStorageDirectory();
-                    ContextWrapper cw = new ContextWrapper(getApplicationContext());
+               //     ContextWrapper cw = new ContextWrapper(getApplicationContext());
                     // path to /data/data/yourapp/app_data/imageDir
-                    File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-                    downloadJob.setFileDownloadPath(directory.getPath());
+                    File directory = getAlbumStorageDir(MainActivity.this,"videos");
+                    downloadJob.setFileDownloadPath(directory.getAbsolutePath());
                     downloadJob.setUrlToDownload("https://www.youtube.com/watch?v="+newsData.getId().getVideoId());
                     downloadJob.setTitle(newsData.getSnippet().getTitle());
                     WorkerPool.deployJob(downloadJob);
@@ -129,6 +129,33 @@ public class MainActivity extends ActionBarActivity {
 
             TextView output = (TextView) findViewById(R.id.output);
             output.setText("Result of the computation is: "+result);
+        }
+        /* Checks if external storage is available for read and write */
+        public boolean isExternalStorageWritable() {
+            String state = Environment.getExternalStorageState();
+            if (Environment.MEDIA_MOUNTED.equals(state)) {
+                return true;
+            }
+            return false;
+        }
+
+        /* Checks if external storage is available to at least read */
+        public boolean isExternalStorageReadable() {
+            String state = Environment.getExternalStorageState();
+            if (Environment.MEDIA_MOUNTED.equals(state) ||
+                    Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
+                return true;
+            }
+            return false;
+        }
+        public File getAlbumStorageDir(Context context, String albumName) {
+            // Get the directory for the app's private pictures directory.
+            File file = new File(context.getExternalFilesDir(
+                    Environment.DIRECTORY_PICTURES), albumName);
+            if (!file.mkdirs()) {
+                Log.e(mTAG, "Directory not created");
+            }
+            return file;
         }
     }
 
