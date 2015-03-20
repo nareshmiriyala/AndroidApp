@@ -1,5 +1,7 @@
 package com.dellnaresh.youtubeandroidapp;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
@@ -113,8 +115,11 @@ public class MainActivity extends ActionBarActivity {
                     //set the path where we want to save the file
                     //in this case, going to save it on the root directory of the
                     //sd card.
-                    File SDCardRoot = Environment.getExternalStorageDirectory();
-                    downloadJob.setFileDownloadPath(SDCardRoot.getPath());
+//                    File SDCardRoot = Environment.getExternalStorageDirectory();
+                    ContextWrapper cw = new ContextWrapper(getApplicationContext());
+                    // path to /data/data/yourapp/app_data/imageDir
+                    File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+                    downloadJob.setFileDownloadPath(directory.getPath());
                     downloadJob.setUrlToDownload("https://www.youtube.com/watch?v="+newsData.getId().getVideoId());
                     downloadJob.setTitle(newsData.getSnippet().getTitle());
                     WorkerPool.deployJob(downloadJob);
