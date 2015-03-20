@@ -36,11 +36,51 @@
         android:layout_alignStart="@+id/listView"
         android:layout_marginBottom="26dp" />
     <ListView
-        android:layout_width="300dp"
-        android:layout_height="374dp"
+        android:layout_width="570dp"
+        android:layout_height="750dp"
         android:id="@+id/listView"
         android:layout_weight="2.59"
-        android:layout_marginBottom="43dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <ImageView
+        android:id="@+id/thumbImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        />
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/thumbImage"
+        android:paddingLeft="5dp"
+        android:paddingTop="5dp"
+        android:text=""
+        android:textStyle="bold"
+        android:typeface="sans" />
+
+    <TextView
+        android:id="@+id/reporter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_marginTop="5dip"
+        android:layout_toRightOf="@id/thumbImage"
+        android:paddingLeft="5dp"
+        android:text=""
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/reporter"
+        android:layout_alignBottom="@+id/reporter"
+        android:layout_alignParentRight="true"
+        android:paddingRight="5dp"
+        android:text=""
+        android:textSize="12sp" />
 </RelativeLayout>

@@ -1,6 +1,8 @@
 package com.dellnaresh.youtubeandroidapp;
 
-import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,15 +10,22 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.dellnaresh.adapters.CustomListAdapter;
 import com.google.api.services.youtube.model.SearchResult;
 import com.youtube.indianmovies.data.Search;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +34,9 @@ public class MainActivity extends ActionBarActivity {
     private Button jButton;
     private EditText jEditText;
     private ListView jListView;
-    List<String> stringList = new ArrayList<>();
+    private List<Bitmap> stringList;
+
+    List<com.google.api.services.youtube.model.SearchResult> searchResults=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +45,6 @@ public class MainActivity extends ActionBarActivity {
         jButton = (Button) findViewById(R.id.button);
         jEditText = (EditText) findViewById(R.id.editText);
         jListView = (ListView) findViewById(R.id.listView);
-
 
     }
     //Method called on clicking button
@@ -71,16 +81,11 @@ public class MainActivity extends ActionBarActivity {
         protected void onPreExecute() {
             TextView output = (TextView)findViewById(R.id.output);
             output.setText("Loading....");
+            stringList= new ArrayList<>();
         }
         @Override
         protected String doInBackground(String... arg) {
             Log.d(mTAG, "Just started doing stuff in asynctask");
-            try {
-                Thread.sleep(5000);
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             Log.d(mTAG, "I got "+arg.length+" arguments and they are: ");
             String result = null;
             for (int i = 0 ; i < arg.length ; i++ ) {
@@ -89,36 +94,41 @@ public class MainActivity extends ActionBarActivity {
             }
             Search search=new Search();
             search.setNumberOfVideosReturned(10);
-            List<com.google.api.services.youtube.model.SearchResult> searchResults = search.find(arg[0]);
+            searchResults = search.find(arg[0]);
 
-            if(searchResults!=null) {
-                for (SearchResult searchResult : searchResults) {
-                    stringList.add(searchResult.getSnippet().getTitle());
-                }
-            }
+//            if(searchResults!=null) {
+//                for (SearchResult searchResult : searchResults) {
+//                    stringList.add(downloadBitmap(searchResult.getSnippet().getThumbnails().getDefault().getUrl()));
+//                }
+//            }
 
             runOnUiThread(new Thread() {
                 public void run() {
                     TextView output = (TextView) findViewById(R.id.output);
-                    output.setText("I am done");
+                    output.setText("Search Completed");
                 }
             });
-
-            try {
-                Thread.sleep(1000);
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
             return result;
         }
         @Override
         protected void onPostExecute(String result) {
             Log.d(mTAG, "Inside onPostExecute");
-            ArrayAdapter adapter = new ArrayAdapter(MainActivity.this,
-                    android.R.layout.simple_list_item_1, stringList);
-            jListView.setAdapter(adapter);
+//            ArrayAdapter adapter = new ArrayAdapter(MainActivity.this,
+//                    android.R.layout.simple_list_item_1, stringList);
+            CustomListAdapter imageListAdapter=new CustomListAdapter(MainActivity.this,searchResults);
+            jListView.setAdapter(imageListAdapter);
+            jListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                    Object o = jListView.getItemAtPosition(position);
+                    SearchResult newsData = (SearchResult) o;
+                    Toast.makeText(MainActivity.this, "Selected :" + " " + newsData,
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+
             TextView output = (TextView) findViewById(R.id.output);
             output.setText("Result of the computation is: "+result);
         }
