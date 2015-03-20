@@ -1,6 +1,7 @@
 package com.dellnaresh.youtubeandroidapp;
 
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,8 +16,12 @@ import android.widget.Toast;
 
 import com.dellnaresh.adapters.CustomListAdapter;
 import com.google.api.services.youtube.model.SearchResult;
+import com.youtube.downloader.AppManagedDownload;
+import com.youtube.downloader.DownloadJob;
 import com.youtube.indianmovies.data.Search;
+import com.youtube.workerpool.WorkerPool;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -103,6 +108,17 @@ public class MainActivity extends ActionBarActivity {
                     SearchResult newsData = (SearchResult) o;
                     Toast.makeText(MainActivity.this, "Selected :" + " " + newsData,
                             Toast.LENGTH_LONG).show();
+                    WorkerPool.getInstance();
+                    DownloadJob downloadJob=new DownloadJob("job");
+                    //set the path where we want to save the file
+                    //in this case, going to save it on the root directory of the
+                    //sd card.
+                    File SDCardRoot = Environment.getExternalStorageDirectory();
+                    downloadJob.setFileDownloadPath(SDCardRoot.getPath());
+                    downloadJob.setUrlToDownload("https://www.youtube.com/watch?v="+newsData.getId().getVideoId());
+                    downloadJob.setTitle(newsData.getSnippet().getTitle());
+                    WorkerPool.deployJob(downloadJob);
+
                 }
             });
 
