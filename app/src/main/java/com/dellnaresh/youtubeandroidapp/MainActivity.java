@@ -1,6 +1,5 @@
 package com.dellnaresh.youtubeandroidapp;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -9,7 +8,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,12 +17,10 @@ import com.dellnaresh.adapters.CustomListAdapter;
 import com.google.api.services.youtube.model.SearchResult;
 import com.youtube.indianmovies.data.Search;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
-    private Button jButton;
     private EditText jEditText;
     private ListView jListView;
 
@@ -34,7 +30,6 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        jButton = (Button) findViewById(R.id.button);
         jEditText = (EditText) findViewById(R.id.editText);
         jListView = (ListView) findViewById(R.id.listView);
 
