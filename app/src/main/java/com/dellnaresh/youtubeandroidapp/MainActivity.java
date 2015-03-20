@@ -27,7 +27,6 @@ public class MainActivity extends ActionBarActivity {
     private Button jButton;
     private EditText jEditText;
     private ListView jListView;
-    private List<Bitmap> stringList;
 
     List<com.google.api.services.youtube.model.SearchResult> searchResults=null;
 
@@ -74,7 +73,6 @@ public class MainActivity extends ActionBarActivity {
         protected void onPreExecute() {
             TextView output = (TextView)findViewById(R.id.output);
             output.setText("Loading....");
-            stringList= new ArrayList<>();
         }
         @Override
         protected String doInBackground(String... arg) {
