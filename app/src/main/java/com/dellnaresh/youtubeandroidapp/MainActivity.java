@@ -95,13 +95,6 @@ public class MainActivity extends ActionBarActivity {
             Search search=new Search();
             search.setNumberOfVideosReturned(10);
             searchResults = search.find(arg[0]);
-
-//            if(searchResults!=null) {
-//                for (SearchResult searchResult : searchResults) {
-//                    stringList.add(downloadBitmap(searchResult.getSnippet().getThumbnails().getDefault().getUrl()));
-//                }
-//            }
-
             runOnUiThread(new Thread() {
                 public void run() {
                     TextView output = (TextView) findViewById(R.id.output);
@@ -114,8 +107,6 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d(mTAG, "Inside onPostExecute");
-//            ArrayAdapter adapter = new ArrayAdapter(MainActivity.this,
-//                    android.R.layout.simple_list_item_1, stringList);
             CustomListAdapter imageListAdapter=new CustomListAdapter(MainActivity.this,searchResults);
             jListView.setAdapter(imageListAdapter);
             jListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
