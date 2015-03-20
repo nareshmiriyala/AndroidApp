@@ -105,7 +105,7 @@ public class MainActivity extends ActionBarActivity {
                 public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                     Object o = jListView.getItemAtPosition(position);
                     SearchResult searchResult = (SearchResult) o;
-                    Toast.makeText(MainActivity.this, "Selected :" + " " + searchResult,
+                    Toast.makeText(MainActivity.this, "Downloading:" + " " + searchResult.getSnippet().getTitle(),
                             Toast.LENGTH_LONG).show();
                     new DownloadFileFromURL(MainActivity.this).execute(searchResult);
 
