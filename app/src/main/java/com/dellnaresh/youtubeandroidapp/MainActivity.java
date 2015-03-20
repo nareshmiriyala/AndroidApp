@@ -1,8 +1,6 @@
 package com.dellnaresh.youtubeandroidapp;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -21,11 +19,6 @@ import com.dellnaresh.adapters.CustomListAdapter;
 import com.google.api.services.youtube.model.SearchResult;
 import com.youtube.indianmovies.data.Search;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
-
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,7 +86,7 @@ public class MainActivity extends ActionBarActivity {
                 Log.d(mTAG, (i+1)+" => "+arg[i]);
             }
             Search search=new Search();
-            search.setNumberOfVideosReturned(10);
+            Search.setNumberOfVideosReturned(10);
             searchResults = search.find(arg[0]);
             runOnUiThread(new Thread() {
                 public void run() {

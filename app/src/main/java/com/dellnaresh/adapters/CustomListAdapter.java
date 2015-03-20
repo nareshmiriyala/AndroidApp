@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.dellnaresh.youtubeandroidapp.R;
 import com.google.api.services.youtube.model.SearchResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class CustomListAdapter extends BaseAdapter {

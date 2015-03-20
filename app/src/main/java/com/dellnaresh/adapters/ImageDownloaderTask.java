@@ -7,8 +7,6 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.dellnaresh.youtubeandroidapp.R;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -48,8 +46,7 @@ class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
                 InputStream inputStream = null;
                 try {
                     inputStream = entity.getContent();
-                    final Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                    return bitmap;
+                    return  BitmapFactory.decodeStream(inputStream);
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();
@@ -63,9 +60,7 @@ class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
             getRequest.abort();
             Log.w("ImageDownloader", "Error while retrieving bitmap from " + url);
         } finally {
-            if (client != null) {
-                client.close();
-            }
+            client.close();
         }
         return null;
     }
@@ -77,16 +72,14 @@ class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
             bitmap = null;
         }
 
-        if (imageViewReference != null) {
-            ImageView imageView = (ImageView) imageViewReference.get();
-            if (imageView != null) {
+        ImageView imageView = (ImageView) imageViewReference.get();
+        if (imageView != null) {
 
-                if (bitmap != null) {
-                    imageView.setImageBitmap(bitmap);
-                }
+            if (bitmap != null) {
+                imageView.setImageBitmap(bitmap);
             }
-
         }
+
     }
 
 }
