@@ -45,5 +45,4 @@
         android:paddingRight="5dp"
         android:text=""
         android:textSize="12sp" />
-
 </RelativeLayout>

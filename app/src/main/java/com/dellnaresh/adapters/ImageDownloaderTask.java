@@ -46,7 +46,7 @@ class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
                 InputStream inputStream = null;
                 try {
                     inputStream = entity.getContent();
-                    return  BitmapFactory.decodeStream(inputStream);
+                    return BitmapFactory.decodeStream(inputStream);
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();

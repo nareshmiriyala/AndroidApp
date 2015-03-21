@@ -1,5 +1,7 @@
 package com.dellnaresh.youtubeandroidapp;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -18,6 +20,7 @@ import com.dellnaresh.com.dellnaresh.asynctasks.DownloadFileFromURL;
 import com.google.api.services.youtube.model.SearchResult;
 import com.youtube.indianmovies.data.Search;
 
+import java.io.File;
 import java.util.List;
 
 
@@ -26,6 +29,8 @@ public class MainActivity extends ActionBarActivity {
     private EditText jEditText;
     private ListView jListView;
     private Search search;
+    // declare the dialog as a member field of your activity
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +40,31 @@ public class MainActivity extends ActionBarActivity {
         jListView = (ListView) findViewById(R.id.listView);
         search = new Search();
         Search.setNumberOfVideosReturned(10);
+        mProgressDialog = new ProgressDialog(MainActivity.this);
+        mProgressDialog.setMessage("A message");
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgressDialog.setCancelable(true);
+        jListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                Object o = jListView.getItemAtPosition(position);
+                SearchResult searchResult = (SearchResult) o;
+                Toast.makeText(MainActivity.this, "Downloading:" + " " + searchResult.getSnippet().getTitle(),
+                        Toast.LENGTH_LONG).show();
+                final AsyncTask<SearchResult, Integer, String> downloadTask = new DownloadFileFromURL(MainActivity.this,mProgressDialog).execute(searchResult);
+                mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        downloadTask.cancel(true);
+                    }
+                });
+
+
+            }
+        });
+
     }
 
     //Method called on clicking button
@@ -77,36 +107,15 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected String doInBackground(String... arg) {
             Log.d(mTAG, "Just started doing stuff in asynctask");
-
             searchResults = search.find(arg[0]);
-            runOnUiThread(new Thread() {
-                public void run() {
-                    TextView output = (TextView) findViewById(R.id.output);
-                    output.setText("Search Completed");
-                }
-            });
-
             return "OK";
         }
 
         @Override
         protected void onPostExecute(String result) {
             Log.d(mTAG, "Inside onPostExecute");
-            CustomListAdapter imageListAdapter = new CustomListAdapter(MainActivity.this, searchResults);
-            jListView.setAdapter(imageListAdapter);
-            jListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                    Object o = jListView.getItemAtPosition(position);
-                    SearchResult searchResult = (SearchResult) o;
-                    Toast.makeText(MainActivity.this, "Downloading:" + " " + searchResult.getSnippet().getTitle(),
-                            Toast.LENGTH_LONG).show();
-                    new DownloadFileFromURL(MainActivity.this).execute(searchResult);
-
-                }
-            });
-
+           CustomListAdapter customListAdapter= new CustomListAdapter(MainActivity.this, searchResults);
+            jListView.setAdapter(customListAdapter);
             TextView output = (TextView) findViewById(R.id.output);
             output.setText("Result of the computation is: " + result);
         }
