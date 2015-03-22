@@ -1,5 +1,6 @@
 package com.dellnaresh.com.dellnaresh.asynctasks;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -48,15 +49,40 @@ public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String
     @Override
     protected String doInBackground(SearchResult... params) {
         WorkerPool.getInstance();
-        DownloadJob downloadJob = new DownloadJob("job");
+        final DownloadJob downloadJob = new DownloadJob("job");
         File directory = getAlbumStorageDir(context);
         downloadJob.setFileDownloadPath(directory.getAbsolutePath());
         downloadJob.setUrlToDownload("https://www.youtube.com/watch?v=" + params[0].getId().getVideoId());
         downloadJob.setTitle(params[0].getSnippet().getTitle());
         WorkerPool.deployJob(downloadJob);
-        do {
-            publishProgress(((int) downloadJob.getDownloadProgress()));
-        } while (downloadJob.getDownloadProgress() <= 100);
+
+        Thread updateProgress = new Thread() {
+            public void run() {
+                int oldProgress = (int) (downloadJob.getDownloadProgress() * 100);
+
+                while (oldProgress < 100) {
+                    int value = (int) (downloadJob.getDownloadProgress() * 100);
+                    if (value != oldProgress) {
+                        oldProgress = value;
+                       publishProgress(value);
+                    }
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+            }
+        };
+        updateProgress.start();
+
+        try {
+            WorkerPool.shutdown();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return "SUCCESS";
     }
 
@@ -83,20 +109,18 @@ public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String
         // Get the directory for the app's private pictures directory.
         File file = new File(String.valueOf(context.getExternalFilesDir(
                 Environment.DIRECTORY_PICTURES)));
-        if (!file.mkdirs()) {
-            Log.e(mTAG, "Directory not created");
-        }
+       if (!file.exists()) {
+           if (!file.mkdirs()) {
+               Log.e(mTAG, "Directory not created");
+           }
+       }
         return file;
     }
 
     @Override
     protected void onPostExecute(String result) {
         Log.d(mTAG, "Inside onPostExecute:Download done to file directory:" + result);
-        try {
-            WorkerPool.shutdown();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         mWakeLock.release();
         mProgressDialog.dismiss();
         if (result != null)

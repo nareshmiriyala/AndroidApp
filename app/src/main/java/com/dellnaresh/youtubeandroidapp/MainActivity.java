@@ -19,6 +19,7 @@ import com.dellnaresh.adapters.CustomListAdapter;
 import com.dellnaresh.com.dellnaresh.asynctasks.DownloadFileFromURL;
 import com.google.api.services.youtube.model.SearchResult;
 import com.youtube.indianmovies.data.Search;
+import com.youtube.workerpool.WorkerPool;
 
 import java.io.File;
 import java.util.List;
@@ -41,7 +42,7 @@ public class MainActivity extends ActionBarActivity {
         search = new Search();
         Search.setNumberOfVideosReturned(10);
         mProgressDialog = new ProgressDialog(MainActivity.this);
-        mProgressDialog.setMessage("A message");
+        mProgressDialog.setMessage("Downloading File");
         mProgressDialog.setIndeterminate(true);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mProgressDialog.setCancelable(true);
@@ -58,6 +59,11 @@ public class MainActivity extends ActionBarActivity {
                     @Override
                     public void onCancel(DialogInterface dialog) {
                         downloadTask.cancel(true);
+                        try {
+                            WorkerPool.shutdown();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
                 });
 
