@@ -10,16 +10,19 @@ import android.widget.TextView;
 
 import com.dellnaresh.youtubeandroidapp.R;
 import com.google.api.services.youtube.model.SearchResult;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 public class CustomListAdapter extends BaseAdapter {
     private List<SearchResult> listData;
     private LayoutInflater layoutInflater;
+    private Context context;
 
     public CustomListAdapter(Context context, List<SearchResult> listData) {
         this.listData = listData;
         layoutInflater = LayoutInflater.from(context);
+        this.context=context;
     }
 
     @Override
@@ -62,7 +65,8 @@ public class CustomListAdapter extends BaseAdapter {
                     holder.reportedDateView.setText(searchItem.getSnippet().getPublishedAt().toString());
 
                 if (holder.imageView != null) {
-                    new ImageDownloaderTask(holder.imageView).execute(searchItem.getSnippet().getThumbnails().getDefault().getUrl());
+                //    new ImageDownloaderTask(holder.imageView).execute(searchItem.getSnippet().getThumbnails().getDefault().getUrl());
+                    Picasso.with(context).load(searchItem.getSnippet().getThumbnails().getDefault().getUrl()).into(holder.imageView);
                 }
             }
         }
