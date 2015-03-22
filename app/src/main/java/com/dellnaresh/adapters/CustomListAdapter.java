@@ -66,7 +66,7 @@ public class CustomListAdapter extends BaseAdapter {
 
                 if (holder.imageView != null) {
                 //    new ImageDownloaderTask(holder.imageView).execute(searchItem.getSnippet().getThumbnails().getDefault().getUrl());
-                    Picasso.with(context).load(searchItem.getSnippet().getThumbnails().getDefault().getUrl()).into(holder.imageView);
+                    Picasso.with(context).load(searchItem.getSnippet().getThumbnails().getDefault().getUrl()).resize(200,200).into(holder.imageView);
                 }
             }
         }
