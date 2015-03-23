@@ -31,6 +31,7 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
         this.context=context;
     }
 
+
     @Override
     protected void onProgressUpdate(Integer... values) {
         mInfo.setProgress(values[0]);
@@ -92,7 +93,19 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
                             e.printStackTrace();
                         }
                     }
+                    // ok, file is downloaded,
+                    if (mInfo.getProgress() >= 100) {
 
+                        // sleep 2 seconds, so that you can see the 100%
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        // close the progress bar dialog
+                        mInfo.setProgress(0);
+                    }
 
                 }
             };
@@ -124,6 +137,7 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
     @Override
     protected void onPreExecute() {
         mInfo.setDownloadState(DownloadState.DOWNLOADING);
+        mInfo.setProgress(0);
     }
 
 }
