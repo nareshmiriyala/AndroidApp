@@ -1,11 +1,9 @@
 package com.dellnaresh.com.dellnaresh.asynctasks;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.PowerManager;
 import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -103,7 +101,7 @@ public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String
                 Log.e(mTAG, "Directory not created");
             }
         }
-        Log.i(mTAG, "Directory path "+file.getAbsolutePath());
+        Log.i(mTAG, "Directory path " + file.getAbsolutePath());
         return file;
     }
 

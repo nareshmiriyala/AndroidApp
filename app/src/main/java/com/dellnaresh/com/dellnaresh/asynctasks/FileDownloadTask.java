@@ -8,39 +8,40 @@ import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.dellnaresh.com.dellnaresh.entity.DownloadInfo;
-import com.dellnaresh.youtubeandroidapp.MainActivity;
 import com.youtube.downloader.DownloadJob;
 import com.youtube.workerpool.WorkerPool;
 
 import java.io.File;
 
-import static com.dellnaresh.com.dellnaresh.entity.DownloadInfo.*;
+import static com.dellnaresh.com.dellnaresh.entity.DownloadInfo.DownloadState;
 
 
 /**
  * Simulate downloading a file, by increasing the progress of the FileInfo from 0 to size - 1.
  */
 public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
-    private static final String    TAG = FileDownloadTask.class.getSimpleName();
+    private static final String TAG = FileDownloadTask.class.getSimpleName();
     final DownloadInfo mInfo;
     Context context;
     private Handler mHandler = new Handler();
 
-    public FileDownloadTask(DownloadInfo info,Context context) {
+    public FileDownloadTask(DownloadInfo info, Context context) {
         mInfo = info;
-        this.context=context;
+        this.context = context;
     }
 
 
     @Override
     protected void onProgressUpdate(Integer... values) {
         mInfo.setProgress(values[0]);
+        Log.i(TAG, "Progress Update Value:" + values[0]);
         ProgressBar bar = mInfo.getProgressBar();
-        if(bar != null) {
+        if (bar != null) {
             bar.setProgress(mInfo.getProgress());
             bar.invalidate();
         }
     }
+
     /* Checks if external storage is available for read and write */
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
@@ -64,7 +65,7 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
         return file;
     }
 
-        @Override
+    @Override
     protected Void doInBackground(Void... params) {
         Log.d(TAG, "Starting download for " + mInfo.getFilename());
         mInfo.setDownloadState(DownloadState.DOWNLOADING);
@@ -76,9 +77,12 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
         downloadJob.setUrlToDownload("https://www.youtube.com/watch?v=" + mInfo.getSearchResult().getId().getVideoId());
         downloadJob.setTitle(mInfo.getSearchResult().getSnippet().getTitle());
         WorkerPool.deployJob(downloadJob);
-            Thread updateProgress = new Thread() {
-                public void run() {
-                    while (mInfo.getProgress() < 100) {
+        Thread updateProgress = new Thread() {
+            public void run() {
+                while (mInfo.getProgress() < 100) {
+                    if (downloadJob.isFailedDownload()) {
+                        break;
+                    }
 //                        mProgressStatus = (int) (downloadJob.getDownloadProgress() * 100);
 //                        // Update the progress bar
 //                        mHandler.post(new Runnable() {
@@ -86,30 +90,30 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
 //                                progressBar.setProgress(mProgressStatus);
 //                            }
 //                        });
-                        publishProgress((int) (downloadJob.getDownloadProgress() * 100));
-                        try {
-                            Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    publishProgress((int) (downloadJob.getDownloadProgress() * 100));
+                    try {
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
-                    // ok, file is downloaded,
-                    if (mInfo.getProgress() >= 100) {
-
-                        // sleep 2 seconds, so that you can see the 100%
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-
-                        // close the progress bar dialog
-                        mInfo.setProgress(0);
-                    }
-
                 }
-            };
-            updateProgress.start();
+//                    // ok, file is downloaded,
+//                    if (mInfo.getProgress() >= 100) {
+//
+//                        // sleep 2 seconds, so that you can see the 100%
+//                        try {
+//                            Thread.sleep(2000);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//                        // close the progress bar dialog
+//                        mInfo.setProgress(0);
+//                    }
+
+            }
+        };
+        updateProgress.start();
 //
 //            Thread updateProgress = new Thread() {
 //                public void run() {

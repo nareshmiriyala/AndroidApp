@@ -1,43 +1,33 @@
 package com.dellnaresh.youtubeandroidapp;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dellnaresh.adapters.CustomListAdapter;
-import com.dellnaresh.com.dellnaresh.asynctasks.DownloadFileFromURL;
 import com.dellnaresh.com.dellnaresh.entity.DownloadInfo;
-import com.dellnaresh.com.dellnaresh.util.ViewHolder;
 import com.google.api.services.youtube.model.SearchResult;
 import com.youtube.indianmovies.data.Search;
-import com.youtube.workerpool.WorkerPool;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
+    // declare the dialog as a member field of your activity
+    private static final int PROGRESS = 0x1;
     List<DownloadInfo> downloadInfoList = null;
     private EditText jEditText;
     private ListView jListView;
     private Search search;
-    // declare the dialog as a member field of your activity
-    private static final int PROGRESS = 0x1;
-
     private ProgressBar mProgress;
 
 
@@ -71,6 +61,7 @@ public class MainActivity extends ActionBarActivity {
 //        });
 
     }
+
     //Method called on clicking button
     public void startTask(View view) {
         SearchAsyncTask mTask = new SearchAsyncTask();
@@ -111,10 +102,10 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected String doInBackground(String... arg) {
             Log.d(mTAG, "Just started doing stuff in asynctask");
-            downloadInfoList=new ArrayList<>();
+            downloadInfoList = new ArrayList<>();
             List<SearchResult> searchResults = search.find(arg[0]);
-            for(SearchResult searchResult:searchResults){
-                DownloadInfo downloadInfo=new DownloadInfo("File " , 1000,searchResult);
+            for (SearchResult searchResult : searchResults) {
+                DownloadInfo downloadInfo = new DownloadInfo("File ", 1000, searchResult);
                 downloadInfoList.add(downloadInfo);
             }
             return "OK";
@@ -123,7 +114,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d(mTAG, "Inside onPostExecute");
-           CustomListAdapter customListAdapter= new CustomListAdapter(MainActivity.this, R.id.listView,downloadInfoList);
+            CustomListAdapter customListAdapter = new CustomListAdapter(MainActivity.this, R.id.listView, downloadInfoList);
             jListView.setAdapter(customListAdapter);
             TextView output = (TextView) findViewById(R.id.output);
             output.setText("Result of the computation is: " + result);
