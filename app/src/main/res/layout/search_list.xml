@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:minHeight="50dp"
+    android:descendantFocusability="blocksDescendants"
     android:orientation="horizontal" >
 
     <ImageView
@@ -25,7 +26,7 @@
         android:typeface="sans" />
 
     <TextView
-        android:id="@+id/reporter"
+        android:id="@+id/videoId"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/title"
@@ -39,10 +40,29 @@
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/reporter"
-        android:layout_alignBottom="@+id/reporter"
+        android:layout_alignBaseline="@+id/videoId"
+        android:layout_alignBottom="@+id/videoId"
         android:layout_alignParentRight="true"
         android:paddingRight="5dp"
         android:text=""
         android:textSize="12sp" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="300dp"
+        android:layout_height="30dp"
+        android:id="@+id/progressBar"
+        android:layout_below="@+id/videoId"
+        android:layout_toRightOf="@+id/thumbImage"
+        android:layout_toEndOf="@+id/thumbImage" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Download Button"
+        android:id="@+id/downloadButton"
+        android:layout_toEndOf="@+id/progressBar"
+        android:layout_below="@+id/title"
+        android:layout_toRightOf="@+id/progressBar" />
+
 </RelativeLayout>

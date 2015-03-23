@@ -4,8 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.util.Log;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.api.services.youtube.model.SearchResult;
@@ -21,12 +23,14 @@ public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String
     Context context;
 
     String mTAG = "DownloadFileFromURL";
-    private PowerManager.WakeLock mWakeLock;
-    private ProgressDialog mProgressDialog;
+    private int mProgressStatus = 0;
+    private Handler mHandler = new Handler();
+    private ProgressBar progressBar;
 
-    public DownloadFileFromURL(Context context, ProgressDialog mProgressDialog) {
+
+    public DownloadFileFromURL(Context context, ProgressBar mProgressBar) {
         this.context = context;
-        this.mProgressDialog = mProgressDialog;
+        this.progressBar = mProgressBar;
     }
 
     /**
@@ -37,12 +41,6 @@ public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String
     protected void onPreExecute() {
         super.onPreExecute();
         Log.d(mTAG, "Just started doing download in asynctask");
-
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-                getClass().getName());
-        mWakeLock.acquire();
-        mProgressDialog.show();
     }
 
     @Override
@@ -57,14 +55,14 @@ public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String
 
         Thread updateProgress = new Thread() {
             public void run() {
-                int oldProgress = (int) (downloadJob.getDownloadProgress() * 100);
-
-                while (oldProgress < 100) {
-                    int value = (int) (downloadJob.getDownloadProgress() * 100);
-                    if (value != oldProgress) {
-                        oldProgress = value;
-                       publishProgress(value);
-                    }
+                while (mProgressStatus < 100) {
+                    mProgressStatus = (int) (downloadJob.getDownloadProgress() * 100);
+                    // Update the progress bar
+                    mHandler.post(new Runnable() {
+                        public void run() {
+                            progressBar.setProgress(mProgressStatus);
+                        }
+                    });
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
@@ -92,15 +90,6 @@ public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
-    @Override
-    protected void onProgressUpdate(Integer... progress) {
-        super.onProgressUpdate(progress);
-        // if we get here, length is known, now set indeterminate to false
-        mProgressDialog.setIndeterminate(false);
-        mProgressDialog.setMax(100);
-        mProgressDialog.setProgress(progress[0]);
-    }
-
 
     public File getAlbumStorageDir(Context context) {
         if (isExternalStorageWritable()) {
@@ -109,20 +98,18 @@ public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String
         // Get the directory for the app's private pictures directory.
         File file = new File(String.valueOf(context.getExternalFilesDir(
                 Environment.DIRECTORY_PICTURES)));
-       if (!file.exists()) {
-           if (!file.mkdirs()) {
-               Log.e(mTAG, "Directory not created");
-           }
-       }
+        if (!file.exists()) {
+            if (!file.mkdirs()) {
+                Log.e(mTAG, "Directory not created");
+            }
+        }
+        Log.i(mTAG, "Directory path "+file.getAbsolutePath());
         return file;
     }
 
     @Override
     protected void onPostExecute(String result) {
         Log.d(mTAG, "Inside onPostExecute:Download done to file directory:" + result);
-
-        mWakeLock.release();
-        mProgressDialog.dismiss();
         if (result != null)
             Toast.makeText(context, "Download error: " + result, Toast.LENGTH_LONG).show();
         else
