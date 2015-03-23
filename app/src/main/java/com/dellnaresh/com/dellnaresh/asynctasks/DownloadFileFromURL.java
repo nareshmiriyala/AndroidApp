@@ -1,6 +1,5 @@
 package com.dellnaresh.com.dellnaresh.asynctasks;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -67,7 +66,7 @@ public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String
                        publishProgress(value);
                     }
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -83,6 +82,7 @@ public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         return "SUCCESS";
     }
 

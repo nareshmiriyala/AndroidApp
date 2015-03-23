@@ -41,11 +41,6 @@ public class MainActivity extends ActionBarActivity {
         jListView = (ListView) findViewById(R.id.listView);
         search = new Search();
         Search.setNumberOfVideosReturned(10);
-        mProgressDialog = new ProgressDialog(MainActivity.this);
-        mProgressDialog.setMessage("Downloading File");
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mProgressDialog.setCancelable(true);
         jListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -54,25 +49,33 @@ public class MainActivity extends ActionBarActivity {
                 SearchResult searchResult = (SearchResult) o;
                 Toast.makeText(MainActivity.this, "Downloading:" + " " + searchResult.getSnippet().getTitle(),
                         Toast.LENGTH_LONG).show();
+                mProgressDialog = new ProgressDialog(MainActivity.this);
+                mProgressDialog.setMessage("Downloading File");
+                mProgressDialog.setIndeterminate(true);
+                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                mProgressDialog.setCancelable(true);
                 final AsyncTask<SearchResult, Integer, String> downloadTask = new DownloadFileFromURL(MainActivity.this,mProgressDialog).execute(searchResult);
                 mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
                         downloadTask.cancel(true);
-                        try {
-                            WorkerPool.shutdown();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+
                     }
                 });
-
 
             }
         });
 
     }
 
+    @Override
+    public void onDestroy(){
+            try {
+                WorkerPool.shutdown();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+    }
     //Method called on clicking button
     public void startTask(View view) {
         SearchAsyncTask mTask = new SearchAsyncTask();
