@@ -65,7 +65,6 @@ public class DownloadFile {
                         logger.debug(s + i1.getState() + " " + i1.getDelay());
                         retryCount.incrementAndGet();
                         if (retryCount.get() > 10) {
-                            logger.error("Can't Download the Video");
                             throw new RuntimeException("Cant Download the file");
                         }
                         break;
