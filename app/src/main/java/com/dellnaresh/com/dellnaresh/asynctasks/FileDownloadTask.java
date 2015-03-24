@@ -6,13 +6,9 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ProgressBar;
-
 import com.dellnaresh.com.dellnaresh.entity.DownloadInfo;
-import com.youtube.downloader.DownloadJob;
 import com.youtube.workerpool.WorkerPool;
-
 import java.io.File;
-
 import static com.dellnaresh.com.dellnaresh.entity.DownloadInfo.DownloadState;
 
 
@@ -83,13 +79,6 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
                     if (downloadJob.isFailedDownload()) {
                         break;
                     }
-//                        mProgressStatus = (int) (downloadJob.getDownloadProgress() * 100);
-//                        // Update the progress bar
-//                        mHandler.post(new Runnable() {
-//                            public void run() {
-//                                progressBar.setProgress(mProgressStatus);
-//                            }
-//                        });
                     publishProgress((int) (downloadJob.getDownloadProgress() * 100));
                     try {
                         Thread.sleep(5000);
@@ -97,38 +86,9 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
                         e.printStackTrace();
                     }
                 }
-//                    // ok, file is downloaded,
-//                    if (mInfo.getProgress() >= 100) {
-//
-//                        // sleep 2 seconds, so that you can see the 100%
-//                        try {
-//                            Thread.sleep(2000);
-//                        } catch (InterruptedException e) {
-//                            e.printStackTrace();
-//                        }
-//
-//                        // close the progress bar dialog
-//                        mInfo.setProgress(0);
-//                    }
-
             }
         };
         updateProgress.start();
-//
-//            Thread updateProgress = new Thread() {
-//                public void run() {
-//                    try {
-//                        Thread.sleep(500);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    publishProgress((int) (downloadJob.getDownloadProgress() * 100));
-//                }
-//            };
-//            updateProgress.start();
-//        for (int i = 0; i <= mInfo.getFileSize(); ++i) {
-//
-//        }
         mInfo.setDownloadState(DownloadState.COMPLETE);
         return null;
     }
