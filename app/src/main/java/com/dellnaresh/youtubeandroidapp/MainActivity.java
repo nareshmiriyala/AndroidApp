@@ -39,27 +39,6 @@ public class MainActivity extends ActionBarActivity {
         jListView = (ListView) findViewById(R.id.listView);
         search = new Search();
         Search.setNumberOfVideosReturned(10);
-//        jListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-//                Object o = jListView.getItemAtPosition(position);
-//                SearchResult searchResult = (SearchResult) o;
-//                Toast.makeText(MainActivity.this, "Downloading:" + " " + searchResult.getSnippet().getTitle(),
-//                        Toast.LENGTH_LONG).show();
-//                ViewHolder viewHolder= (ViewHolder) v.getTag();
-//                mProgress= (ProgressBar) viewHolder.progressBar;
-//                final AsyncTask<SearchResult, Integer, String> downloadTask = new DownloadFileFromURL(MainActivity.this,mProgress).execute(searchResult);
-//                mProgress.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        downloadTask.cancel(true);
-//                    }
-//                });
-//
-//            }
-//        });
-
     }
 
     //Method called on clicking button
@@ -114,7 +93,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(String result) {
             Log.d(mTAG, "Inside onPostExecute");
-            CustomListAdapter customListAdapter = new CustomListAdapter(MainActivity.this, R.id.listView, downloadInfoList);
+            CustomListAdapter customListAdapter = new CustomListAdapter(MainActivity.this, R.id.listView, downloadInfoList,MainActivity.this);
             jListView.setAdapter(customListAdapter);
             TextView output = (TextView) findViewById(R.id.output);
             output.setText("Result of the computation is: " + result);

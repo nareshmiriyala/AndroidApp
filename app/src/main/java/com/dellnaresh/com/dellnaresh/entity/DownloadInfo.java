@@ -12,7 +12,8 @@ public class DownloadInfo {
         NOT_STARTED,
         QUEUED,
         DOWNLOADING,
-        COMPLETE
+        COMPLETE,
+        FAILURE
     }
     private volatile DownloadState mDownloadState = DownloadState.NOT_STARTED;
     private final String mFilename;

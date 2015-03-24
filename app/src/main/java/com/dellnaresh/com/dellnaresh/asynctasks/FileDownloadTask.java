@@ -1,14 +1,20 @@
 package com.dellnaresh.com.dellnaresh.asynctasks;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.dellnaresh.com.dellnaresh.com.dellnaresh.observer.CurrentProgressUpdate;
 import com.dellnaresh.com.dellnaresh.com.dellnaresh.observer.DownloadProgressData;
 import com.dellnaresh.com.dellnaresh.entity.DownloadInfo;
+import com.dellnaresh.youtubeandroidapp.MainActivity;
+import com.dellnaresh.youtubeandroidapp.R;
 import com.youtube.workerpool.WorkerPool;
 import java.io.File;
 import static com.dellnaresh.com.dellnaresh.entity.DownloadInfo.DownloadState;
@@ -17,15 +23,17 @@ import static com.dellnaresh.com.dellnaresh.entity.DownloadInfo.DownloadState;
 /**
  * Simulate downloading a file, by increasing the progress of the FileInfo from 0 to size - 1.
  */
-public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
+public class FileDownloadTask extends AsyncTask<Void, Integer, DownloadState> {
     private static final String TAG = FileDownloadTask.class.getSimpleName();
     final DownloadInfo mInfo;
     Context context;
+    Activity activity;
     private Handler mHandler = new Handler();
 
-    public FileDownloadTask(DownloadInfo info, Context context) {
+    public FileDownloadTask(DownloadInfo info, Context context,Activity activity) {
         mInfo = info;
         this.context = context;
+        this.activity=activity;
     }
 
 
@@ -63,7 +71,7 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected DownloadState doInBackground(Void... params) {
         Log.d(TAG, "Starting download for " + mInfo.getFilename());
         mInfo.setDownloadState(DownloadState.DOWNLOADING);
         DownloadProgressData downloadProgressData=new DownloadProgressData();
@@ -75,11 +83,20 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
         downloadJob.setUrlToDownload("https://www.youtube.com/watch?v=" + mInfo.getSearchResult().getId().getVideoId());
         downloadJob.setTitle(mInfo.getSearchResult().getSnippet().getTitle());
         WorkerPool.deployJob(downloadJob);
+
         Thread updateProgress = new Thread() {
             public void run() {
                 while (mInfo.getProgress() < 100 ) {
                     if (currentProgressUpdate.isDownloadFailure()) {
                         Log.w(TAG,"Cant Download Video");
+                        mInfo.setDownloadState(DownloadState.FAILURE);
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(context, mInfo.getSearchResult().getSnippet().getTitle()+" Downloading:" + " " + DownloadState.FAILURE,
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        });
                         break;
                     }
                     int value=(int) (currentProgressUpdate.getDownloadProgress() * 100);
@@ -94,13 +111,24 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
             }
         };
         updateProgress.start();
-        mInfo.setDownloadState(DownloadState.COMPLETE);
-        return null;
+
+        if(mInfo.getProgress()>=100) {
+            mInfo.setDownloadState(DownloadState.COMPLETE);
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(context, mInfo.getSearchResult().getSnippet().getTitle()+" Downloading:" + " " + DownloadState.COMPLETE,
+                            Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+        return mInfo.getDownloadState();
     }
 
     @Override
-    protected void onPostExecute(Void result) {
-        mInfo.setDownloadState(DownloadState.COMPLETE);
+    protected void onPostExecute(DownloadState result) {
+        Toast.makeText(context, mInfo.getSearchResult().getSnippet().getTitle()+" Downloading:" + " " + result,
+                Toast.LENGTH_LONG).show();
     }
 
     @Override

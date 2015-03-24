@@ -1,5 +1,6 @@
 package com.dellnaresh.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
@@ -23,10 +24,12 @@ import java.util.List;
 public class CustomListAdapter extends ArrayAdapter<DownloadInfo> {
     private static final String TAG = CustomListAdapter.class.getSimpleName();
     private Context context;
+    private Activity activity;
 
-    public CustomListAdapter(Context context, int resource, List<DownloadInfo> objects) {
+    public CustomListAdapter(Context context, int resource, List<DownloadInfo> objects,Activity activity) {
         super(context, resource, objects);
         this.context = context;
+        this.activity=activity;
     }
 
 //    public CustomListAdapter(Context context, List<SearchResult> listData) {
@@ -98,7 +101,7 @@ public class CustomListAdapter extends ArrayAdapter<DownloadInfo> {
                 info.setDownloadState(DownloadInfo.DownloadState.QUEUED);
                 button.setEnabled(false);
                 button.invalidate();
-                FileDownloadTask task = new FileDownloadTask(info, context);
+                FileDownloadTask task = new FileDownloadTask(info, context,activity);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });
