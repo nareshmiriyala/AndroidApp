@@ -1,5 +1,7 @@
 package com.dellnaresh.com.dellnaresh.asynctasks;
 
+import com.dellnaresh.com.dellnaresh.com.dellnaresh.observer.DownloadProgressData;
+import com.dellnaresh.com.dellnaresh.util.Utilies;
 import com.dellnaresh.videodownload.VideoDownload;
 import com.dellnaresh.videodownload.info.VideoInfo;
 import com.dellnaresh.videodownload.info.VideoInfo.VideoQuality;
@@ -23,6 +25,11 @@ public class DownloadFile {
     private volatile long last;
     private Logger logger = LoggerFactory.getLogger(DownloadFile.class);
     private volatile double downloadStatus;
+    private DownloadProgressData downloadProgressData;
+
+    public DownloadFile(DownloadProgressData downloadProgressData) {
+        this.downloadProgressData = downloadProgressData;
+    }
 
     public double getDownloadStatus() {
         return downloadStatus;
@@ -50,8 +57,9 @@ public class DownloadFile {
                     case EXTRACTING_DONE:
                     case DONE:
                         downloadStatus = 1.00;
+                        downloadProgressData.setDownloadProgress(downloadStatus);
+                        downloadProgressData.progressChanged();
                         logger.debug(s + i1.getState() + " " + i1.getVideoQuality());
-                        logger.info("Successfully Downloaded");
                         break;
                     case RETRYING:
                         logger.debug(s + i1.getState() + " " + i1.getDelay());
@@ -79,6 +87,8 @@ public class DownloadFile {
                                 }
                             }
                             downloadStatus = (i2.getCount() / (float) i2.getLength());
+                            downloadProgressData.setDownloadProgress(Utilies.round(downloadStatus,3));
+                            downloadProgressData.progressChanged();
                             setDownloadStatus(downloadStatus);
                             logger.debug(String.format("%s %.2f %s", s + i1.getState(), downloadStatus, parts));
                         }
@@ -86,6 +96,7 @@ public class DownloadFile {
                     default:
                         break;
                 }
+
             }
         };
 

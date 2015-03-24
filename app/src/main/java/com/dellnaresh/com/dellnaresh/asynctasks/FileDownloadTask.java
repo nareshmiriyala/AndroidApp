@@ -6,6 +6,8 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ProgressBar;
+import com.dellnaresh.com.dellnaresh.com.dellnaresh.observer.CurrentProgressUpdate;
+import com.dellnaresh.com.dellnaresh.com.dellnaresh.observer.DownloadProgressData;
 import com.dellnaresh.com.dellnaresh.entity.DownloadInfo;
 import com.youtube.workerpool.WorkerPool;
 import java.io.File;
@@ -30,7 +32,6 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
     @Override
     protected void onProgressUpdate(Integer... values) {
         mInfo.setProgress(values[0]);
-        Log.i(TAG, "Progress Update Value:" + values[0]);
         ProgressBar bar = mInfo.getProgressBar();
         if (bar != null) {
             bar.setProgress(mInfo.getProgress());
@@ -65,9 +66,10 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
     protected Void doInBackground(Void... params) {
         Log.d(TAG, "Starting download for " + mInfo.getFilename());
         mInfo.setDownloadState(DownloadState.DOWNLOADING);
-
+        DownloadProgressData downloadProgressData=new DownloadProgressData();
+        final CurrentProgressUpdate currentProgressUpdate=new CurrentProgressUpdate(downloadProgressData);
         WorkerPool.getInstance();
-        final DownloadJob downloadJob = new DownloadJob("job");
+        final DownloadJob downloadJob = new DownloadJob("job",downloadProgressData);
         File directory = getAlbumStorageDir(context);
         downloadJob.setFileDownloadPath(directory.getAbsolutePath());
         downloadJob.setUrlToDownload("https://www.youtube.com/watch?v=" + mInfo.getSearchResult().getId().getVideoId());
@@ -75,13 +77,16 @@ public class FileDownloadTask extends AsyncTask<Void, Integer, Void> {
         WorkerPool.deployJob(downloadJob);
         Thread updateProgress = new Thread() {
             public void run() {
-                while (mInfo.getProgress() < 100) {
-                    if (downloadJob.isFailedDownload()) {
+                while (mInfo.getProgress() < 100 ) {
+                    if (currentProgressUpdate.isDownloadFailure()) {
+                        Log.w(TAG,"Cant Download Video");
                         break;
                     }
-                    publishProgress((int) (downloadJob.getDownloadProgress() * 100));
+                    int value=(int) (currentProgressUpdate.getDownloadProgress() * 100);
+                    Log.i(TAG, downloadJob.getTitle()+":Progress Update Value:"+ value);
+                    publishProgress(value);
                     try {
-                        Thread.sleep(5000);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

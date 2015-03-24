@@ -1,5 +1,6 @@
 package com.dellnaresh.com.dellnaresh.asynctasks;
 
+import com.dellnaresh.com.dellnaresh.com.dellnaresh.observer.DownloadProgressData;
 import com.youtube.workerpool.WorkerThread;
 
 import org.slf4j.Logger;
@@ -16,43 +17,27 @@ public class DownloadJob extends WorkerThread {
     private String urlToDownload;
     private String fileDownloadPath;
     private String title;
-    private double downloadProgress;
     private DownloadFile downloadFile;
-    private boolean failedDownload = false;
+    private DownloadProgressData downloadProgressData;
 
-    public DownloadJob(String s, String urlToDownload, String fileDownloadPath, String title) {
+    public DownloadJob(String s, String urlToDownload, String fileDownloadPath, String title,DownloadProgressData downloadProgressData) {
         super(s);
         this.urlToDownload = urlToDownload;
         this.fileDownloadPath = fileDownloadPath;
         this.title = title;
-        this.downloadFile = new DownloadFile();
+        this.downloadFile = new DownloadFile(downloadProgressData);
+        this.downloadProgressData=downloadProgressData;
     }
 
     public DownloadJob(String s) {
         super(s);
-        this.downloadFile = new DownloadFile();
     }
 
-    public static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
+    public DownloadJob(String s, DownloadProgressData downloadProgressData) {
+        super(s);
+        this.downloadFile = new DownloadFile(downloadProgressData);
+        this.downloadProgressData=downloadProgressData;
 
-        long factor = (long) Math.pow(10, places);
-        value = value * factor;
-        long tmp = Math.round(value);
-        return (double) tmp / factor;
-    }
-
-    public double getDownloadProgress() {
-        Thread progressUpdate = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                downloadProgress = downloadFile.getDownloadStatus();
-
-            }
-        });
-        progressUpdate.start();
-        downloadProgress = round(downloadProgress, 3);
-        return downloadProgress;
     }
 
     public String getTitle() {
@@ -78,14 +63,10 @@ public class DownloadJob extends WorkerThread {
             downloadFile.run(this.urlToDownload, new File(fileDownloadPath), this.title);
         } catch (Exception e) {
             logger.warn("Can't Download File");
-            failedDownload=true;
+            downloadProgressData.setDownloadFailure(true);
+            downloadProgressData.progressChanged();
         }
 
-    }
-
-    public boolean isFailedDownload() {
-        logger.warn("Value of failedDownload:"+failedDownload);
-        return failedDownload;
     }
 
 }

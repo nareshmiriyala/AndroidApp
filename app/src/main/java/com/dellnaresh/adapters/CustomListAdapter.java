@@ -87,7 +87,9 @@ public class CustomListAdapter extends ArrayAdapter<DownloadInfo> {
             }
         }
         holder.progressBar.setProgress(info.getProgress());
+        holder.progressBar.setMax(100);
         info.setProgressBar(holder.progressBar);
+
         holder.button.setEnabled(info.getDownloadState() == DownloadInfo.DownloadState.NOT_STARTED);
         final Button button = holder.button;
         holder.button.setOnClickListener(new View.OnClickListener() {
