@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.net.MalformedURLException;
 
 /**
  * Created by nareshm on 8/03/2015.
@@ -73,14 +74,17 @@ public class DownloadJob extends WorkerThread {
     @Override
     public void processCommand() {
         logger.info("Downloading ULR:" + this.urlToDownload + " to path:" + this.fileDownloadPath);
-        downloadFile.run(this.urlToDownload, new File(fileDownloadPath), this.title);
-        if (downloadFile.isCantDownload()) {
-            failedDownload = true;
+        try {
+            downloadFile.run(this.urlToDownload, new File(fileDownloadPath), this.title);
+        } catch (Exception e) {
+            logger.warn("Can't Download File");
+            failedDownload=true;
         }
 
     }
 
     public boolean isFailedDownload() {
+        logger.warn("Value of failedDownload:"+failedDownload);
         return failedDownload;
     }
 
