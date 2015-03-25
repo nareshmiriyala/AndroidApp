@@ -7,14 +7,10 @@ import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.dellnaresh.com.dellnaresh.com.dellnaresh.observer.CurrentProgressUpdate;
 import com.dellnaresh.com.dellnaresh.com.dellnaresh.observer.DownloadProgressData;
 import com.dellnaresh.com.dellnaresh.entity.DownloadInfo;
-import com.dellnaresh.youtubeandroidapp.MainActivity;
-import com.dellnaresh.youtubeandroidapp.R;
 import com.youtube.workerpool.WorkerPool;
 import java.io.File;
 import static com.dellnaresh.com.dellnaresh.entity.DownloadInfo.DownloadState;
@@ -25,9 +21,9 @@ import static com.dellnaresh.com.dellnaresh.entity.DownloadInfo.DownloadState;
  */
 public class FileDownloadTask extends AsyncTask<Void, Integer, DownloadState> {
     private static final String TAG = FileDownloadTask.class.getSimpleName();
-    final DownloadInfo mInfo;
-    Context context;
-    Activity activity;
+    private final DownloadInfo mInfo;
+    private final Context context;
+    private final Activity activity;
     private Handler mHandler = new Handler();
 
     public FileDownloadTask(DownloadInfo info, Context context,Activity activity) {

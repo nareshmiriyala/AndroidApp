@@ -24,7 +24,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity {
     // declare the dialog as a member field of your activity
     private static final int PROGRESS = 0x1;
-    List<DownloadInfo> downloadInfoList = null;
+    private List<DownloadInfo> downloadInfoList = null;
     private EditText jEditText;
     private ListView jListView;
     private Search search;
@@ -70,7 +70,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private class SearchAsyncTask extends AsyncTask<String, Integer, String> {
-        String mTAG = "myAsyncTask";
+        final String mTAG = "myAsyncTask";
 
         @Override
         protected void onPreExecute() {

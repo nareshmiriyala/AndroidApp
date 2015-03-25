@@ -23,9 +23,9 @@ public class DownloadFile {
 
     private volatile VideoInfo info;
     private volatile long last;
-    private Logger logger = LoggerFactory.getLogger(DownloadFile.class);
+    private final Logger logger = LoggerFactory.getLogger(DownloadFile.class);
     private volatile double downloadStatus;
-    private DownloadProgressData downloadProgressData;
+    private final DownloadProgressData downloadProgressData;
 
     public DownloadFile(DownloadProgressData downloadProgressData) {
         this.downloadProgressData = downloadProgressData;

@@ -11,12 +11,10 @@ import java.util.Observer;
  */
 public class CurrentProgressUpdate implements Observer {
     Logger logger= LoggerFactory.getLogger(CurrentProgressUpdate.class);
-    private Observable observable;
     private double downloadProgress;
-    private boolean downloadFailure;
+    private boolean downloadFailure=false;
 
     public CurrentProgressUpdate(Observable observable) {
-        this.observable = observable;
         observable.addObserver(this);
     }
 

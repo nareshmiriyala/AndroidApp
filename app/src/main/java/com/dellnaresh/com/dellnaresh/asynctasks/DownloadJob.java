@@ -7,13 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.net.MalformedURLException;
 
 /**
  * Created by nareshm on 8/03/2015.
  */
 public class DownloadJob extends WorkerThread {
-    private static Logger logger = LoggerFactory.getLogger(DownloadJob.class);
+    private static final Logger logger = LoggerFactory.getLogger(DownloadJob.class);
     private String urlToDownload;
     private String fileDownloadPath;
     private String title;

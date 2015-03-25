@@ -23,8 +23,8 @@ import java.util.List;
 
 public class CustomListAdapter extends ArrayAdapter<DownloadInfo> {
     private static final String TAG = CustomListAdapter.class.getSimpleName();
-    private Context context;
-    private Activity activity;
+    private final Context context;
+    private final Activity activity;
 
     public CustomListAdapter(Context context, int resource, List<DownloadInfo> objects,Activity activity) {
         super(context, resource, objects);

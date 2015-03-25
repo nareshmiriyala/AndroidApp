@@ -18,12 +18,12 @@ import java.io.File;
  * Created by nareshm on 20/03/2015.
  */
 public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String> {
-    Context context;
+    final Context context;
 
-    String mTAG = "DownloadFileFromURL";
+    final String mTAG = "DownloadFileFromURL";
     private int mProgressStatus = 0;
-    private Handler mHandler = new Handler();
-    private ProgressBar progressBar;
+    private final Handler mHandler = new Handler();
+    private final ProgressBar progressBar;
 
 
     public DownloadFileFromURL(Context context, ProgressBar mProgressBar) {
