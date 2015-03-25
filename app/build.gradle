@@ -55,6 +55,6 @@ dependencies {
     compile ('com.github.axet:wget:1.2.12') { exclude module: 'xmlpull'}
     androidTestCompile "junit:junit:4.10"
     androidTestCompile "org.assertj:assertj-core:1.7.0"
-    androidTestCompile 'org.robolectric:robolectric:2.4'
+
 
 }
