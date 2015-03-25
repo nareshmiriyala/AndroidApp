@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dellnaresh.adapters.CustomListAdapter;
@@ -23,12 +22,10 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity {
     // declare the dialog as a member field of your activity
-    private static final int PROGRESS = 0x1;
     private List<DownloadInfo> downloadInfoList = null;
     private EditText jEditText;
     private ListView jListView;
     private Search search;
-    private ProgressBar mProgress;
 
 
     @Override
