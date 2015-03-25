@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "com.dellnaresh.youtubeandroidapp"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
@@ -32,6 +32,7 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
+        exclude 'LICENSE.txt'
     }
 }
 repositories {
@@ -53,8 +54,7 @@ dependencies {
     compile files('libs/movies-0.0.1-SNAPSHOT.jar')
     compile files('libs/videodownload-1.1.0.jar')
     compile ('com.github.axet:wget:1.2.12') { exclude module: 'xmlpull'}
-    androidTestCompile "junit:junit:4.10"
-    androidTestCompile "org.assertj:assertj-core:1.7.0"
+    androidTestCompile('junit:junit-dep:4.8')
 
 
 }
