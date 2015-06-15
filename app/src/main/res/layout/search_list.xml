@@ -1,68 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="50dp"
-    android:descendantFocusability="blocksDescendants"
-    android:orientation="horizontal" >
+    android:layout_height="fill_parent"
+    android:divider="#ff5187ff"
+    android:dividerPadding="5dp"
+    android:focusable="true"
+    android:orientation="horizontal"
+    android:showDividers="beginning|end">
 
-    <ImageView
-        android:id="@+id/thumbImage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-         />
-
-    <TextView
-        android:id="@+id/title"
+    <TableRow
+        android:id="@+id/tableRow1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/thumbImage"
-        android:paddingLeft="5dp"
-        android:paddingTop="5dp"
-        android:text=""
-        android:textStyle="bold"
-        android:typeface="sans" />
+        android:padding="5dip">
 
-    <TextView
-        android:id="@+id/videoId"
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@android:color/black"
+            android:textStyle="bold"
+            android:typeface="sans" />
+
+        <TextView
+            android:id="@+id/videoId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="2"
+            android:text=""
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:text=""
+            android:textSize="12sp" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/title"
-        android:layout_marginTop="5dip"
-        android:layout_toRightOf="@id/thumbImage"
-        android:paddingLeft="5dp"
-        android:text=""
-        android:textSize="12sp" />
+        android:padding="5dip">
 
-    <TextView
-        android:id="@+id/date"
+        <ImageView
+            android:id="@+id/thumbImage"
+            style="@style/AppTheme"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/description"
+            android:cropToPadding="false"
+            android:focusable="true" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/videoId"
-        android:layout_alignBottom="@+id/videoId"
-        android:layout_alignParentRight="true"
-        android:paddingRight="5dp"
-        android:text=""
-        android:textSize="12sp" />
+        android:padding="5dip">
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="300dp"
-        android:layout_height="30dp"
-        android:id="@+id/progressBar"
-        android:layout_below="@+id/videoId"
-        android:layout_toRightOf="@+id/thumbImage"
-        android:layout_toEndOf="@+id/thumbImage" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:background="#fffffc5a"
+            android:indeterminate="false"
+            android:mirrorForRtl="true"
+            android:progress="@android:integer/config_shortAnimTime"
+            android:visibility="visible" />
+    </TableRow>
 
-    <Button
+    <TableRow
+        android:id="@+id/tableRow4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Download Video"
-        android:id="@+id/downloadButton"
-        android:layout_toEndOf="@+id/progressBar"
-        android:layout_below="@+id/title"
-        android:layout_toRightOf="@+id/progressBar" />
+        android:padding="5dip">
 
-</RelativeLayout>
+        <Button
+            android:id="@+id/downloadButton"
+            android:text="@string/download_video" />
+    </TableRow>
+
+</TableLayout>

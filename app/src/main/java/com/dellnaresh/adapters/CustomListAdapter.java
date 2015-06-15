@@ -26,24 +26,11 @@ public class CustomListAdapter extends ArrayAdapter<DownloadInfo> {
     private final Context context;
     private final Activity activity;
 
-    public CustomListAdapter(Context context, int resource, List<DownloadInfo> objects,Activity activity) {
+    public CustomListAdapter(Context context, int resource, List<DownloadInfo> objects, Activity activity) {
         super(context, resource, objects);
         this.context = context;
-        this.activity=activity;
+        this.activity = activity;
     }
-
-//    public CustomListAdapter(Context context, List<SearchResult> listData) {
-//        this.listData = listData;
-//        layoutInflater = LayoutInflater.from(context);
-//        this.context=context;
-//    }
-
-
-//
-//    @Override
-//    public Object getItem(int position) {
-//        return listData.get(position);
-//    }
 
     @Override
     public long getItemId(int position) {
@@ -69,7 +56,6 @@ public class CustomListAdapter extends ArrayAdapter<DownloadInfo> {
             row.setTag(holder);
         } else {
             holder = (ViewHolder) row.getTag();
-            holder.info.setProgressBar(null);
             holder.info = info;
             holder.info.setProgressBar(holder.progressBar);
         }
@@ -84,7 +70,6 @@ public class CustomListAdapter extends ArrayAdapter<DownloadInfo> {
                     holder.date.setText(searchItem.getSnippet().getPublishedAt().toString());
 
                 if (holder.imageView != null) {
-                    //    new ImageDownloaderTask(holder.imageView).execute(searchItem.getSnippet().getThumbnails().getDefault().getUrl());
                     Picasso.with(context).load(searchItem.getSnippet().getThumbnails().getDefault().getUrl()).resize(200, 200).into(holder.imageView);
                 }
             }
@@ -101,7 +86,7 @@ public class CustomListAdapter extends ArrayAdapter<DownloadInfo> {
                 info.setDownloadState(DownloadInfo.DownloadState.QUEUED);
                 button.setEnabled(false);
                 button.invalidate();
-                FileDownloadTask task = new FileDownloadTask(info, context,activity);
+                FileDownloadTask task = new FileDownloadTask(info, context, activity);
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             }
         });

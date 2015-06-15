@@ -18,12 +18,12 @@ import java.io.File;
  * Created by nareshm on 20/03/2015.
  */
 public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String> {
-    final Context context;
+    private final Context context;
 
-    final String mTAG = "DownloadFileFromURL";
-    private int mProgressStatus = 0;
+    private final String mTAG = "DownloadFileFromURL";
     private final Handler mHandler = new Handler();
     private final ProgressBar progressBar;
+    private int mProgressStatus = 0;
 
 
     public DownloadFileFromURL(Context context, ProgressBar mProgressBar) {
@@ -83,13 +83,13 @@ public class DownloadFileFromURL extends AsyncTask<SearchResult, Integer, String
     }
 
     /* Checks if external storage is available for read and write */
-    public boolean isExternalStorageWritable() {
+    private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
 
-    public File getAlbumStorageDir(Context context) {
+    private File getAlbumStorageDir(Context context) {
         if (isExternalStorageWritable()) {
             Log.e(mTAG, "External directory writable");
         }

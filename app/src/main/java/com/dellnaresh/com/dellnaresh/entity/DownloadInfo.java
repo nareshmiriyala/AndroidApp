@@ -1,6 +1,5 @@
 package com.dellnaresh.com.dellnaresh.entity;
 
-import android.util.Log;
 import android.widget.ProgressBar;
 
 import com.google.api.services.youtube.model.SearchResult;
@@ -8,26 +7,18 @@ import com.google.api.services.youtube.model.SearchResult;
 
 public class DownloadInfo {
     private final static String TAG = DownloadInfo.class.getSimpleName();
-    public enum DownloadState {
-        NOT_STARTED,
-        QUEUED,
-        DOWNLOADING,
-        COMPLETE,
-        FAILURE
-    }
-    private volatile DownloadState mDownloadState = DownloadState.NOT_STARTED;
     private final String mFilename;
-    private volatile Integer mProgress;
     private final Integer mFileSize;
+    private volatile DownloadState mDownloadState = DownloadState.NOT_STARTED;
+    private volatile Integer mProgress;
     private volatile ProgressBar mProgressBar;
     private SearchResult searchResult;
-
-    public DownloadInfo(String filename, Integer size,SearchResult mSearchResult){
-        mFilename = filename;
+    public DownloadInfo(SearchResult mSearchResult) {
+        mFilename = "File ";
         mProgress = 0;
-        mFileSize = size;
+        mFileSize = 1000;
         mProgressBar = null;
-        searchResult=mSearchResult;
+        searchResult = mSearchResult;
     }
 
     public SearchResult getSearchResult() {
@@ -41,16 +32,17 @@ public class DownloadInfo {
     public ProgressBar getProgressBar() {
         return mProgressBar;
     }
+
     public void setProgressBar(ProgressBar progressBar) {
-        Log.d(TAG, "setProgressBar " + mFilename + " to " + progressBar);
         mProgressBar = progressBar;
+    }
+
+    public DownloadState getDownloadState() {
+        return mDownloadState;
     }
 
     public void setDownloadState(DownloadState state) {
         mDownloadState = state;
-    }
-    public DownloadState getDownloadState() {
-        return mDownloadState;
     }
 
     public Integer getProgress() {
@@ -67,5 +59,13 @@ public class DownloadInfo {
 
     public String getFilename() {
         return mFilename;
+    }
+
+    public enum DownloadState {
+        NOT_STARTED,
+        QUEUED,
+        DOWNLOADING,
+        COMPLETE,
+        FAILURE
     }
 }

@@ -1,17 +1,19 @@
 package com.dellnaresh.com.dellnaresh.asynctasks;
 
 import com.dellnaresh.com.dellnaresh.com.dellnaresh.observer.DownloadProgressData;
-import com.dellnaresh.com.dellnaresh.util.Utilies;
+import com.dellnaresh.com.dellnaresh.util.Utility;
 import com.dellnaresh.videodownload.VideoDownload;
 import com.dellnaresh.videodownload.info.VideoInfo;
 import com.dellnaresh.videodownload.info.VideoInfo.VideoQuality;
 import com.dellnaresh.videodownload.info.VideoParser;
 import com.dellnaresh.videodownload.vhs.YouTubeQParser;
-import com.github.axet.wget.info.DownloadInfo;
-import com.github.axet.wget.info.DownloadInfo.Part;
-import com.github.axet.wget.info.DownloadInfo.Part.States;
+import com.dellnaresh.wget.info.DownloadInfo;
+import com.dellnaresh.wget.info.DownloadInfo.Part;
+import com.dellnaresh.wget.info.DownloadInfo.Part.States;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -21,11 +23,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class DownloadFile {
 
+    private final Logger logger = LoggerFactory.getLogger(DownloadFile.class);
+    private final DownloadProgressData downloadProgressData;
     private volatile VideoInfo info;
     private volatile long last;
-    private final Logger logger = LoggerFactory.getLogger(DownloadFile.class);
     private volatile double downloadStatus;
-    private final DownloadProgressData downloadProgressData;
 
     public DownloadFile(DownloadProgressData downloadProgressData) {
         this.downloadProgressData = downloadProgressData;
@@ -47,7 +49,7 @@ public class DownloadFile {
             public void run() {
 
                 VideoInfo i1 = info;
-                DownloadInfo i2 = i1.getInfo();
+                DownloadInfo i2 = i1.getDownloadInfo();
                 String s = Thread.currentThread().getName() + ":: " + title + ":: ";
 
                 // notify app or save download state
@@ -86,7 +88,7 @@ public class DownloadFile {
                                 }
                             }
                             downloadStatus = (i2.getCount() / (float) i2.getLength());
-                            downloadProgressData.setDownloadProgress(Utilies.round(downloadStatus,3));
+                            downloadProgressData.setDownloadProgress(Utility.round(downloadStatus));
                             downloadProgressData.progressChanged();
                             setDownloadStatus(downloadStatus);
                             logger.debug(String.format("%s %.2f %s", s + i1.getState(), downloadStatus, parts));
@@ -110,7 +112,7 @@ public class DownloadFile {
         // create simple youtube request
         //user = new YouTubeParser(info.getWeb());
         // download maximum video quality
-        user = new YouTubeQParser(info.getWeb(), VideoQuality.p360);
+        user = new YouTubeQParser(info.getWebUrl(), VideoQuality.p360);
         // download non webm only
         //user = new YouTubeMPGParser(info.getWeb(), VideoQuality.p480);
 
@@ -118,10 +120,10 @@ public class DownloadFile {
 
         // [OPTIONAL] call v.extract() only if you d like to get video title
         // before start download. or just skip it.
-        v.extract(user, stop, notify);
+        v.extractVideo(user, stop, notify);
         logger.debug(info.getTitle());
 
-        v.download(user, stop, notify);
+        v.downloadVideo(user, stop, notify);
     }
 
 

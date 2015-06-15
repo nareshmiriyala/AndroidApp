@@ -2,7 +2,7 @@ package com.dellnaresh.youtubeandroidapp;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends AppCompatActivity {
     // declare the dialog as a member field of your activity
     private List<DownloadInfo> downloadInfoList = null;
     private EditText jEditText;
@@ -40,8 +40,7 @@ public class MainActivity extends ActionBarActivity {
 
     //Method called on clicking button
     public void startTask(View view) {
-        SearchAsyncTask mTask = new SearchAsyncTask();
-        mTask.execute(jEditText.getText().toString(), "10", "Hello world");
+        new SearchAsyncTask();
     }
 
     @Override
@@ -67,7 +66,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private class SearchAsyncTask extends AsyncTask<String, Integer, String> {
-        final String mTAG = "myAsyncTask";
+        final String mTAG = "SearchAsyncTask";
 
         @Override
         protected void onPreExecute() {
@@ -77,23 +76,23 @@ public class MainActivity extends ActionBarActivity {
 
         @Override
         protected String doInBackground(String... arg) {
-            Log.d(mTAG, "Just started doing stuff in asynctask");
+            Log.d(mTAG, "Starting searching for video");
             downloadInfoList = new ArrayList<>();
             List<SearchResult> searchResults = search.find(arg[0]);
             for (SearchResult searchResult : searchResults) {
-                DownloadInfo downloadInfo = new DownloadInfo("File ", 1000, searchResult);
+                DownloadInfo downloadInfo = new DownloadInfo(searchResult);
                 downloadInfoList.add(downloadInfo);
             }
-            return "OK";
+            return "Success";
         }
 
         @Override
         protected void onPostExecute(String result) {
             Log.d(mTAG, "Inside onPostExecute");
-            CustomListAdapter customListAdapter = new CustomListAdapter(MainActivity.this, R.id.listView, downloadInfoList,MainActivity.this);
+            CustomListAdapter customListAdapter = new CustomListAdapter(MainActivity.this, R.id.listView, downloadInfoList, MainActivity.this);
             jListView.setAdapter(customListAdapter);
             TextView output = (TextView) findViewById(R.id.output);
-            output.setText("Result of the computation is: " + result);
+            output.setText("Search Result : " + result);
         }
 
     }

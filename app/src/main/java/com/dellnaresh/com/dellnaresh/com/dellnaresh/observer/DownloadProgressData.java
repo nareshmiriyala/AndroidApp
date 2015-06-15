@@ -11,17 +11,18 @@ public class DownloadProgressData extends Observable {
 
     public DownloadProgressData() {
     }
-    public void progressChanged(){
+
+    public void progressChanged() {
         setChanged();
         notifyObservers();
     }
 
-    public void setDownloadProgress(double downloadProgress){
-        this.downloadProgress=downloadProgress;
-    }
-
     public double getDownloadProgress() {
         return downloadProgress;
+    }
+
+    public void setDownloadProgress(double downloadProgress) {
+        this.downloadProgress = downloadProgress;
     }
 
     public boolean isDownloadFailure() {

@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_name">YoutubeAndroidApp</string>
-    <string name="hello_world"></string>
     <string name="action_settings">Settings</string>
+    <string name="search">Search</string>
+    <string name="description">search video</string>
+    <string name="download_video">Download Video</string>
 
 </resources>

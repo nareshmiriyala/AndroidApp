@@ -11,7 +11,7 @@ import java.io.File;
 /**
  * Created by nareshm on 8/03/2015.
  */
-public class DownloadJob extends WorkerThread {
+class DownloadJob extends WorkerThread {
     private static final Logger logger = LoggerFactory.getLogger(DownloadJob.class);
     private String urlToDownload;
     private String fileDownloadPath;
@@ -19,23 +19,23 @@ public class DownloadJob extends WorkerThread {
     private DownloadFile downloadFile;
     private DownloadProgressData downloadProgressData;
 
-    public DownloadJob(String s, String urlToDownload, String fileDownloadPath, String title,DownloadProgressData downloadProgressData) {
+    private DownloadJob(String s, String urlToDownload, String fileDownloadPath, String title, DownloadProgressData downloadProgressData) {
         super(s);
         this.urlToDownload = urlToDownload;
         this.fileDownloadPath = fileDownloadPath;
         this.title = title;
         this.downloadFile = new DownloadFile(downloadProgressData);
-        this.downloadProgressData=downloadProgressData;
+        this.downloadProgressData = downloadProgressData;
     }
 
-    public DownloadJob(String s) {
+    private DownloadJob(String s) {
         super(s);
     }
 
-    public DownloadJob(String s, DownloadProgressData downloadProgressData) {
-        super(s);
+    public DownloadJob(DownloadProgressData downloadProgressData) {
+        super("job");
         this.downloadFile = new DownloadFile(downloadProgressData);
-        this.downloadProgressData=downloadProgressData;
+        this.downloadProgressData = downloadProgressData;
 
     }
 
